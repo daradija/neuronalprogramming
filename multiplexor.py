@@ -149,6 +149,9 @@ class Net:
 				if name==None:
 					#print("k1,k2",k1[0].name,k1[1].name,k2[0].name,k2[1].name)
 					continue
+
+				if not y in self.man:
+					continue
 					
 				s=self.Signal(name,f,woman=False)
 				s.fathers=[y,a,b]
@@ -160,7 +163,9 @@ class Net:
 
 if __name__ == "__main__":
 	net=Net()
-	man=True
+	man=False
+	net.Signal("1",man=False,f=lambda: 1)
+	net.Signal("0",man=False,f=lambda: 0)
 	a=net.Signal("a",man=man)
 	b=net.Signal("b",man=man)
 	c=net.Signal("c",man=man)
@@ -169,7 +174,10 @@ if __name__ == "__main__":
 	net.Signal("r2",man=man)
 	net.Signal("r3",man=man)
 	net.Signal("r4",man=man)
-	y=net.Signal("y",lambda: a.value if c.value==0 else b.value,woman=False)
+	net.Signal("y",lambda: a.value if c.value==0 else b.value,woman=False)
+	net.Signal("and",lambda: a.value*b.value,woman=False)
+	net.Signal("or",lambda: min(1,a.value+b.value),woman=False)
+
 
 	while net.iterator():
 		net.guess()
